@@ -1,29 +1,30 @@
-import java.util.ArrayList;
-
 public class Task {
-  private boolean state;
+  private int state;
   private String description;
-  ArrayList<Task> taskList = new ArrayList<>();
 
   public Task(String description) {
-    this.state = false;
+    this.state = 0;
     this.description = description;
   }
 
   public Task(String i, String description) {
     this.description = description;
     if (Integer.valueOf(i) == 1) {
-      this.state = true;
+      this.state = 1;
     } else if (Integer.valueOf(i) == 0) {
-      this.state = false;
+      this.state = 0;
     }
   }
 
   public void checkTask() {
-    state = true;
+    state = 1;
   }
 
-  public boolean getState() {
+  public int getState() {
     return state;
+  }
+
+  public String getDesc() {
+    return description;
   }
 }

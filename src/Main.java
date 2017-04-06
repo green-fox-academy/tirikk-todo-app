@@ -50,6 +50,8 @@ public class Main {
         checkTask(parameter);
       }
     }
+
+    writeFile();
   }
 
   private static void printUsage() {
@@ -64,8 +66,12 @@ public class Main {
   }
 
   private static void writeFile() {
+    List<String> temp = new ArrayList<>();
+    for (Task task :  taskList) {
+      temp.add(task.getState() + ";" + task.getDesc());
+    }
     try {
-      Files.write(Paths.get("src/tasks.csv"), tasks);
+      Files.write(Paths.get("src/tasks.csv"), temp);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -83,27 +89,27 @@ public class Main {
   }
 
   private static void listTasks() {
-    if (tasks.isEmpty()) {
+    if (taskList.isEmpty()) {
       System.out.println("No todos for today! :)");
     } else {
-      for (String task : tasks) {
-        if (taskList.get(tasks.indexOf(task)).getState()) {
-          System.out.println((tasks.indexOf(task) + 1) + " - [x] " + task);
+      for (Task task : taskList) {
+        if (task.getState() == 1) {
+          System.out.println((taskList.indexOf(task) + 1) + " - [x] " + task.getDesc());
         } else {
-          System.out.println((tasks.indexOf(task) + 1) + " - [ ] " + task);
+          System.out.println((taskList.indexOf(task) + 1) + " - [ ] " + task.getDesc());
         }
       }
     }
   }
 
   private static void addTask(String task) {
-    tasks.add(task);
+//    tasks.add(task);
     taskList.add(new Task(task));
   }
 
   private static void removeTask(String i) {
     try {
-      tasks.remove(Integer.valueOf(i) - 1);
+      taskList.remove(Integer.valueOf(i) - 1);
     } catch (IndexOutOfBoundsException | NumberFormatException d) {
       if (d.getClass().equals(NumberFormatException.class)) {
         System.out.println("Unable to remove: index is not a number!");
