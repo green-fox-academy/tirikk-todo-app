@@ -4,8 +4,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class Task {
-  String state;
-  String description;
+  private String state;
+  private String description;
 
   public Task(String description) {
     this.state = "done";
