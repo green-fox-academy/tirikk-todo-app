@@ -2,14 +2,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
   public static void main(String[] args) {
     if (args.length == 0) {
       printUsage();
-    } else if (args[0].equals("-l")) {
+    }
+    if (args[0].equals("-l")) {
       listTasks();
+    }
+    if (args[0].equals("-a")) {
+      String parameter = args[Arrays.asList(args).indexOf("-a") + 1];
+      addTask(parameter);
     }
   }
 
@@ -38,5 +44,9 @@ public class Main {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  private static void addTask(String task) {
+    Task newTask = new Task(task);
   }
 }
