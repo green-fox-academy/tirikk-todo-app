@@ -77,7 +77,7 @@ public class Main {
   private static void listUndoneTasks() {
     int toDo = 0;
     for (Task task : taskList) {
-      if (task.getState() == 0) {
+      if (!task.getState()) {
         toDo++;
       }
     }
@@ -85,7 +85,7 @@ public class Main {
       System.out.println("No tasks to do!");
     } else {
       for (Task task : taskList) {
-        if (task.getState() == 0) {
+        if (!task.getState()) {
           System.out.println((taskList.indexOf(task) + 1) + " - [ ] " + task.getDesc());
         }
       }
@@ -97,7 +97,7 @@ public class Main {
       System.out.println("No tasks at all!");
     } else {
       for (Task task : taskList) {
-        if (task.getState() == 1) {
+        if (task.getState()) {
           System.out.println((taskList.indexOf(task) + 1) + " - [x] " + task.getDesc());
         } else {
           System.out.println((taskList.indexOf(task) + 1) + " - [ ] " + task.getDesc());

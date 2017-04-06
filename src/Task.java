@@ -1,27 +1,27 @@
 class Task {
-  private int state;
+  private boolean completed;
   private String description;
 
   Task(String description) {
-    this.state = 0;
+    this.completed = false;
     this.description = description;
   }
 
   Task(String i, String description) {
     this.description = description;
-    if (Integer.valueOf(i) == 1) {
-      this.state = 1;
-    } else if (Integer.valueOf(i) == 0) {
-      this.state = 0;
+    if (i.equals("true")) {
+      this.completed = true;
+    } else {
+      this.completed = false;
     }
   }
 
   void checkTask() {
-    state = 1;
+    completed = true;
   }
 
-  int getState() {
-    return state;
+  boolean getState() {
+    return completed;
   }
 
   String getDesc() {
