@@ -28,8 +28,12 @@ public class Main {
     try {
       Path filePath = Paths.get("src/tasks.csv");
       List<String> tasks = Files.readAllLines(filePath);
-      for (String task : tasks) {
-        System.out.println((tasks.indexOf(task) + 1) + " - " + task);
+      if (tasks.isEmpty()) {
+        System.out.println("No todos for today! :)");
+      } else {
+        for (String task : tasks) {
+          System.out.println((tasks.indexOf(task) + 1) + " - " + task);
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();
