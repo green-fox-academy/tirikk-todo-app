@@ -14,8 +14,12 @@ public class Main {
       listTasks();
     }
     if (args[0].equals("-a")) {
-      String parameter = args[Arrays.asList(args).indexOf("-a") + 1];
-      addTask(parameter);
+      if (Arrays.asList(args).indexOf("-a") == args.length - 1) {
+        System.out.println("Unable to add: no task provided");
+      } else {
+        String parameter = args[Arrays.asList(args).indexOf("-a") + 1];
+        addTask(parameter);
+      }
     }
   }
 
