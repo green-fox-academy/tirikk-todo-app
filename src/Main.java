@@ -19,8 +19,12 @@ public class Main {
         addTask(parameter);
       }
     } else if (args[0].equals("-r")) {
-      int parameter = Integer.valueOf(args[Arrays.asList(args).indexOf("-r") + 1]);
-      removeTask(parameter);
+      if (Arrays.asList(args).indexOf("-r") == args.length - 1) {
+        System.out.println("Unable to remove: no index provided");
+      } else {
+        String parameter = args[Arrays.asList(args).indexOf("-r") + 1];
+        removeTask(parameter);
+      }
     }
   }
 
@@ -55,14 +59,20 @@ public class Main {
     Task newTask = new Task(task);
   }
 
-  private static void removeTask(int i) {
+  private static void removeTask(String i) {
     try {
       Path filePath = Paths.get("src/tasks.csv");
       List<String> tasks = Files.readAllLines(filePath);
-      tasks.remove(i - 1);
+      tasks.remove(Integer.valueOf(i) - 1);
       Files.write(filePath, tasks);
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (IndexOutOfBoundsException | IOException | NumberFormatException d) {
+      if (d.getClass().equals(NumberFormatException.class)) {
+        System.out.println("Unable to remove: index is not a number!");
+      } else if (d.getClass().equals(IndexOutOfBoundsException.class)) {
+        System.out.println("Unable to remove: index is out of bound!");
+      } else {
+        d.printStackTrace();
+      }
     }
   }
 }
