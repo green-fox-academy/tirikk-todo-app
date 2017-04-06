@@ -13,12 +13,14 @@ public class Main {
 
     createTasks();
 
-    String[] arguments = {"-l", "-a", "-r", "-c"};
+    String[] arguments = {"-l", "-la", "-a", "-r", "-c"};
     if (args.length == 0) {
       printUsage();
     } else if (!Arrays.asList(arguments).contains(args[0])) {
       System.out.println("Unsupported argument");
     } else if (args[0].equals("-l")) {
+      listUndoneTasks();
+    } else if (args[0].equals("-la")) {
       listTasks();
     } else if (args[0].equals("-a")) {
       if (Arrays.asList(args).indexOf("-a") == args.length - 1) {
@@ -51,7 +53,8 @@ public class Main {
             "=====================\n" +
             "\n" +
             "Command line arguments:\n" +
-            " -l   Lists all the tasks\n" +
+            " -l   Lists unfinished tasks\n" +
+            " -la  Lists all the tasks\n" +
             " -a   Adds a new task\n" +
             " -r   Removes a task\n" +
             " -c   Completes a task");
@@ -71,9 +74,27 @@ public class Main {
     }
   }
 
+  private static void listUndoneTasks() {
+    int toDo = 0;
+    for (Task task : taskList) {
+      if (task.getState() == 0) {
+        toDo++;
+      }
+    }
+    if (toDo == 0) {
+      System.out.println("No tasks to do!");
+    } else {
+      for (Task task : taskList) {
+        if (task.getState() == 0) {
+          System.out.println((taskList.indexOf(task) + 1) + " - [ ] " + task.getDesc());
+        }
+      }
+    }
+  }
+
   private static void listTasks() {
     if (taskList.isEmpty()) {
-      System.out.println("No tasks for today! :)");
+      System.out.println("No tasks at all!");
     } else {
       for (Task task : taskList) {
         if (task.getState() == 1) {
