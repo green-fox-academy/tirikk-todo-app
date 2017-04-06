@@ -1,13 +1,13 @@
-public class Task {
+class Task {
   private int state;
   private String description;
 
-  public Task(String description) {
+  Task(String description) {
     this.state = 0;
     this.description = description;
   }
 
-  public Task(String i, String description) {
+  Task(String i, String description) {
     this.description = description;
     if (Integer.valueOf(i) == 1) {
       this.state = 1;
@@ -16,15 +16,15 @@ public class Task {
     }
   }
 
-  public void checkTask() {
+  void checkTask() {
     state = 1;
   }
 
-  public int getState() {
+  int getState() {
     return state;
   }
 
-  public String getDesc() {
+  String getDesc() {
     return description;
   }
 }
