@@ -7,17 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Main {
-  static List<String> tasks;
-  static List<Task> taskList = new ArrayList<>();
+  private static List<Task> taskList = new ArrayList<>();
 
   public static void main(String[] args) {
-
-    try {
-      Path filePath = Paths.get("src/tasks.csv");
-      tasks = Files.readAllLines(filePath);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
 
     createTasks();
 
@@ -61,36 +53,27 @@ public class Main {
             "Command line arguments:\n" +
             " -l   Lists all the tasks\n" +
             " -a   Adds a new task\n" +
-            " -r   Removes an task\n" +
-            " -c   Completes an task");
+            " -r   Removes a task\n" +
+            " -c   Completes a task");
   }
 
-  private static void writeFile() {
-    List<String> temp = new ArrayList<>();
-    for (Task task :  taskList) {
-      temp.add(task.getState() + ";" + task.getDesc());
-    }
+  private static void createTasks() {
+    List<String> initList;
     try {
-      Files.write(Paths.get("src/tasks.csv"), temp);
+      Path filePath = Paths.get("src/tasks.csv");
+      initList = Files.readAllLines(filePath);
+      for (String task : initList) {
+        List<String> temp = Arrays.asList(task.split(";"));
+        taskList.add(new Task(temp.get(0), temp.get(1)));
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  private static void createTasks() {
-    for (String task : tasks) {
-      if (task.contains(";")) {
-        List<String> temp = Arrays.asList(task.split(";"));
-        taskList.add(new Task(temp.get(0), temp.get(1)));
-      } else {
-        taskList.add(new Task(task));
-      }
-    }
-  }
-
   private static void listTasks() {
     if (taskList.isEmpty()) {
-      System.out.println("No todos for today! :)");
+      System.out.println("No tasks for today! :)");
     } else {
       for (Task task : taskList) {
         if (task.getState() == 1) {
@@ -103,7 +86,6 @@ public class Main {
   }
 
   private static void addTask(String task) {
-//    tasks.add(task);
     taskList.add(new Task(task));
   }
 
@@ -134,6 +116,18 @@ public class Main {
       } else {
         d.printStackTrace();
       }
+    }
+  }
+
+  private static void writeFile() {
+    List<String> temp = new ArrayList<>();
+    for (Task task : taskList) {
+      temp.add(task.getState() + ";" + task.getDesc());
+    }
+    try {
+      Files.write(Paths.get("src/tasks.csv"), temp);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 }
