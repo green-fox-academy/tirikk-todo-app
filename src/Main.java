@@ -2,13 +2,30 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Main {
+  static List<String> tasks;
+  static List<Task> taskList = new ArrayList<>();
+
   public static void main(String[] args) {
+
+    try {
+      Path filePath = Paths.get("src/tasks.csv");
+      tasks = Files.readAllLines(filePath);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    createTasks();
+
+    String[] arguments = {"-l", "-a", "-r", "-c"};
     if (args.length == 0) {
       printUsage();
+    } else if (!Arrays.asList(arguments).contains(args[0])) {
+      System.out.println("Unsupported argument");
     } else if (args[0].equals("-l")) {
       listTasks();
     } else if (args[0].equals("-a")) {
@@ -25,6 +42,13 @@ public class Main {
         String parameter = args[Arrays.asList(args).indexOf("-r") + 1];
         removeTask(parameter);
       }
+    } else if (args[0].equals("-c")) {
+      if (Arrays.asList(args).indexOf("-r") == args.length - 1) {
+        System.out.println("Unable to check: no index provided");
+      } else {
+        String parameter = args[Arrays.asList(args).indexOf("-c") + 1];
+        checkTask(parameter);
+      }
     }
   }
 
@@ -39,37 +63,68 @@ public class Main {
             " -c   Completes an task");
   }
 
-  private static void listTasks() {
+  private static void writeFile() {
     try {
-      Path filePath = Paths.get("src/tasks.csv");
-      List<String> tasks = Files.readAllLines(filePath);
-      if (tasks.isEmpty()) {
-        System.out.println("No todos for today! :)");
-      } else {
-        for (String task : tasks) {
-          System.out.println((tasks.indexOf(task) + 1) + " - " + task);
-        }
-      }
+      Files.write(Paths.get("src/tasks.csv"), tasks);
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
+  private static void createTasks() {
+    for (String task : tasks) {
+      if (task.contains(";")) {
+        List<String> temp = Arrays.asList(task.split(";"));
+        taskList.add(new Task(temp.get(0), temp.get(1)));
+      } else {
+        taskList.add(new Task(task));
+      }
+    }
+  }
+
+  private static void listTasks() {
+    if (tasks.isEmpty()) {
+      System.out.println("No todos for today! :)");
+    } else {
+      for (String task : tasks) {
+        if (taskList.get(tasks.indexOf(task)).getState()) {
+          System.out.println((tasks.indexOf(task) + 1) + " - [x] " + task);
+        } else {
+          System.out.println((tasks.indexOf(task) + 1) + " - [ ] " + task);
+        }
+      }
+    }
+  }
+
   private static void addTask(String task) {
-    Task newTask = new Task(task);
+    tasks.add(task);
+    taskList.add(new Task(task));
   }
 
   private static void removeTask(String i) {
     try {
-      Path filePath = Paths.get("src/tasks.csv");
-      List<String> tasks = Files.readAllLines(filePath);
       tasks.remove(Integer.valueOf(i) - 1);
-      Files.write(filePath, tasks);
-    } catch (IndexOutOfBoundsException | IOException | NumberFormatException d) {
+    } catch (IndexOutOfBoundsException | NumberFormatException d) {
       if (d.getClass().equals(NumberFormatException.class)) {
         System.out.println("Unable to remove: index is not a number!");
       } else if (d.getClass().equals(IndexOutOfBoundsException.class)) {
         System.out.println("Unable to remove: index is out of bound!");
+      } else {
+        d.printStackTrace();
+      }
+    }
+  }
+
+  private static void checkTask(String i) {
+    try {
+      Task temp = taskList.get(Integer.valueOf(i) - 1);
+      temp.checkTask();
+      taskList.set(Integer.valueOf(i) - 1, temp);
+    } catch (IndexOutOfBoundsException | NumberFormatException d) {
+      if (d.getClass().equals(NumberFormatException.class)) {
+        System.out.println("Unable to check: index is not a number!");
+      } else if (d.getClass().equals(IndexOutOfBoundsException.class)) {
+        System.out.println("Unable to check: index is out of bound!");
       } else {
         d.printStackTrace();
       }
