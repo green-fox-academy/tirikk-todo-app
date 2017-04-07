@@ -35,10 +35,11 @@ public class Main {
       if (Arrays.asList(args).indexOf("-r") == args.length - 1) {
         System.out.println("Unable to remove: no index provided");
       } else {
-        for (int i = args.length -1; i > Arrays.asList(args).indexOf("-r"); i--) {
-          String parameter = args[i];
-          removeTask(parameter);
+        ArrayList<String> indexes = new ArrayList<>();
+        for (int i = Arrays.asList(args).indexOf("-r") + 1; i < args.length; i++) {
+          indexes.add(args[i]);
         }
+        removeTask(indexes);
       }
     } else if (args[0].equals("-c")) {
       if (Arrays.asList(args).indexOf("-r") == args.length - 1) {
@@ -116,9 +117,16 @@ public class Main {
     taskList.add(new Task(task));
   }
 
-  private static void removeTask(String i) {
+  private static void removeTask(ArrayList<String> list) {
     try {
-      taskList.remove(Integer.valueOf(i) - 1);
+      List<Task> buffer = new ArrayList<>();
+      for (String i : list) {
+        buffer.add(taskList.get(Integer.valueOf(i) - 1));
+      }
+      for (Task task : buffer) {
+        int indexBuffer = taskList.indexOf(task);
+        taskList.remove(indexBuffer);
+      }
     } catch (IndexOutOfBoundsException | NumberFormatException d) {
       if (d.getClass().equals(NumberFormatException.class)) {
         System.out.println("Unable to remove: index is not a number!");
