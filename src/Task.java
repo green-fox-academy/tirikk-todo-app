@@ -17,7 +17,11 @@ class Task {
   }
 
   void checkTask() {
-    completed = true;
+    if (completed) {
+      completed = false;
+    } else {
+      completed = true;
+    }
   }
 
   boolean getState() {

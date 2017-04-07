@@ -63,7 +63,7 @@ public class Main {
             " -la  Lists all the tasks\n" +
             " -a   Adds a new task\n" +
             " -r   Removes a task\n" +
-            " -c   Completes a task");
+            " -c   Sets a task as finished/unfinished");
   }
 
   private static void createTasks() {
