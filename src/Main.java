@@ -26,22 +26,28 @@ public class Main {
       if (Arrays.asList(args).indexOf("-a") == args.length - 1) {
         System.out.println("Unable to add: no task provided");
       } else {
-        String parameter = args[Arrays.asList(args).indexOf("-a") + 1];
-        addTask(parameter);
+        for (int i = Arrays.asList(args).indexOf("-a") + 1; i < args.length; i++) {
+          String parameter = args[i];
+          addTask(parameter);
+        }
       }
     } else if (args[0].equals("-r")) {
       if (Arrays.asList(args).indexOf("-r") == args.length - 1) {
         System.out.println("Unable to remove: no index provided");
       } else {
-        String parameter = args[Arrays.asList(args).indexOf("-r") + 1];
-        removeTask(parameter);
+        for (int i = args.length -1; i > Arrays.asList(args).indexOf("-r"); i--) {
+          String parameter = args[i];
+          removeTask(parameter);
+        }
       }
     } else if (args[0].equals("-c")) {
       if (Arrays.asList(args).indexOf("-r") == args.length - 1) {
         System.out.println("Unable to check: no index provided");
       } else {
-        String parameter = args[Arrays.asList(args).indexOf("-c") + 1];
-        checkTask(parameter);
+        for (int i = Arrays.asList(args).indexOf("-c") + 1; i < args.length; i++) {
+          String parameter = args[i];
+          checkTask(parameter);
+        }
       }
     }
 
